@@ -8,7 +8,7 @@ function App() {
   return (
     <>
 
-    <div className='h-screen w-screen bg-cover bg-center flex justify-center items-center text-8xl text-slate-100 'style={{ backgroundImage: `url(${mountain})` }}>
+    <div className='h-screen w-screen bg-cover bg-center flex justify-center items-center text-6xl text-slate-100 'style={{ backgroundImage: `url(${mountain})` }}>
       <Home/>
     </div>
 
