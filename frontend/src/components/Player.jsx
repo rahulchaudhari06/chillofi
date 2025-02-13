@@ -105,28 +105,26 @@ export default function Player() {
     
 
     return (
-        <div className="pl-20 pt-[85vh] bottom-10 text-white left-10">
-            <div className="hidden" id="player-container">
-                <div ref={playerRef}></div>
-            </div>
-
-            <div className="text-md ml-3 font-bold mb-2">
-                {videoTitle || "Loading..."}
-            </div>
-
-
-
-            <button className="text-sm border bg-white text-black mr-2 rounded-sm border-slate-100 p-2 cursor-pointer ml-2" onClick={togglePlayPause}>
+        <div className="pl-20 pt-[85vh] bottom-10 text-white left-10 flex flex-col">
+        <div className="hidden" id="player-container">
+            <div ref={playerRef}></div>
+        </div>
+    
+        <div className="w-fit bg-slate-500 font-bold px-2 py-1 rounded-sm mb-2 text-md">
+            {videoTitle || "Loading..."}
+        </div>
+    
+        <div className="flex flex-row space-x-2">
+            <button  onClick={togglePlayPause} className="text-sm border bg-white text-black rounded-sm border-slate-100 p-2 cursor-pointer">
                 {isPlaying ? "PAUSE" : "PLAY"}
             </button>
-
-            <button className="text-sm border bg-slate-900 rounded-sm border-slate-100 p-2 cursor-pointer" onClick={handleVideoChange}>
+    
+            <button onClick={handleVideoChange} className="text-sm border bg-slate-900 text-white rounded-sm border-slate-100 p-2 cursor-pointer">
                 CHANGE RADIO
             </button>
-
-            
             <BgChangeButton />
-        
         </div>
+    </div>
+    
     );
 }
