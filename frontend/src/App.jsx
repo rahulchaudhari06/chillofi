@@ -1,12 +1,11 @@
-import './App.css'
+import './App.css';
 import { useState } from 'react';
 import Background from './components/Background';
 import Player from './components/Player';
 import Navbar from './components/Navbar';
 import TodoModal from './components/TodoModal';
+import TimeDisplay from './components/TimeDisplay';  // Import TimeDisplay component
 import { BgProvider } from "./components/BgContext";
-import { ImPrevious } from 'react-icons/im';
-
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,16 +16,17 @@ function App() {
 
   return (
     <>
-     <div className="relative ">
-     <BgProvider>
-            <Background />
-            <Navbar toggleModal={toggleModal} />
-            <TodoModal isOpen={isModalOpen} toggleModal={toggleModal} />
-            <Player/>
+      <div className="relative">
+        <BgProvider>
+          <Background />
+          <Navbar toggleModal={toggleModal} />
+          <TimeDisplay /> 
+          <TodoModal isOpen={isModalOpen} toggleModal={toggleModal} />
+          <Player />
         </BgProvider>
-        </div>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

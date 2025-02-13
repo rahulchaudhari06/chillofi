@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { FaTrashAlt, FaRegCircle, FaRegCheckCircle } from "react-icons/fa";
 
-export default function TodoModal({ isOpen, toggleModal }) {
+export default function TodoModal({ isOpen, toggleModal, buttonRef }) {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
@@ -33,18 +34,22 @@ export default function TodoModal({ isOpen, toggleModal }) {
 
   return (
     <div
+    className="mr-20"
       style={{
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        background: "#fff",
+        position: "absolute",
+        top: buttonRef.current ? buttonRef.current.getBoundingClientRect().bottom + window.scrollY : "50%",
+        left: buttonRef.current ? buttonRef.current.getBoundingClientRect().left : "50%",
+        transform: "translateX(-50%)",
+        background: "inherit",
+        color: "#f1f1f1",
         padding: "20px",
         borderRadius: "8px",
-        boxShadow: "0 0 10px rgba(0,0,0,0.2)",
+        boxShadow: "0 0 10px rgba(0,0,0,0.5)",
+        width: "300px",
+        zIndex: 1000,
       }}
     >
-      <h3>Todo List</h3>
+      <h3 style={{ color: "#f1f1f1", textAlign: "center" }}>Todo List</h3>
       <input
         type="text"
         placeholder="Add a task..."
@@ -54,24 +59,79 @@ export default function TodoModal({ isOpen, toggleModal }) {
             e.target.value = "";
           }
         }}
+        style={{
+          width: "100%",
+          padding: "10px",
+          marginBottom: "10px",
+          borderRadius: "5px",
+          border: "1px solid #555",
+          background: "inherit",
+          color: "#fff",
+        }}
       />
-      <ul>
+      <ul style={{ listStyleType: "none", padding: 0 }}>
         {todos.map((todo, index) => (
-          <li key={index}>
-            <span
-              onClick={() => toggleDone(index)}
+          <li
+            key={index}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "10px",
+              background: "inherit",
+              borderRadius: "5px",
+              marginBottom: "8px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <span
+                onClick={() => toggleDone(index)}
+                style={{
+                  cursor: "pointer",
+                  marginRight: "10px",
+                  textDecoration: todo.done ? "line-through" : "none",
+                  color: "#fff",
+                }}
+              >
+                {todo.done ? <FaRegCheckCircle /> : <FaRegCircle />}
+              </span>
+              <span
+                style={{
+                  color: "#fff",
+                  textDecoration: todo.done ? "line-through" : "none",
+                }}
+              >
+                {todo.text}
+              </span>
+            </div>
+            <button
+              onClick={() => deleteTodo(index)}
               style={{
-                textDecoration: todo.done ? "line-through" : "none",
+                background: "none",
+                border: "none",
                 cursor: "pointer",
+                color: "#f1f1f1",
               }}
             >
-              {todo.text}
-            </span>
-            <button onClick={() => deleteTodo(index)}>❌</button>
+              <FaTrashAlt />
+            </button>
           </li>
         ))}
       </ul>
-      <button onClick={toggleModal}>Close</button>
+      <button
+        onClick={toggleModal}
+        style={{
+          backgroundColor: "#f44336",
+          border: "none",
+          padding: "10px 20px",
+          color: "#fff",
+          borderRadius: "5px",
+          cursor: "pointer",
+          width: "100%",
+        }}
+      >
+        Close
+      </button>
     </div>
   );
 }

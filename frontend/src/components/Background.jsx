@@ -5,7 +5,8 @@ export default function Background() {
 
     return (
         <div
-        className="h-screen w-screen -z-50 bg-cover absolute bg-center transition-all duration-500 bg-black brightness-50"            style={{ backgroundImage: `url(${bg})` }}
+        className="h-screen w-screen -z-50 bg-cover absolute bg-center transition-all duration-500 bg-black brightness-50"            style={{ backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
         />
     );
 }
+

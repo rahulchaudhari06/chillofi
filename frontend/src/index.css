@@ -1,1 +1,11 @@
-@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap');@import 'tailwindcss';
+
+@theme {
+    --font-pone: "Funnel Display", "sans-serif"; 
+  }
+
+
+
+:root{
+    background-color: black;
+}

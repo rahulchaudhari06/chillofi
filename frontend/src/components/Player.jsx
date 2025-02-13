@@ -2,13 +2,13 @@ import { useRef, useEffect, useState } from "react";
 import { BgChangeButton } from "./BgChangeButton";
 
 export default function Player() {
-    const playerRef = useRef(null); // Reference to iframe
-    const ytPlayer = useRef(null); // Reference to YouTube Player instance
-    const [currentVideo, setCurrentVideo] = useState("4xDzrJKXOOY"); // Default video
-    const [isPlaying, setIsPlaying] = useState(false); // Track play/pause state
-    const [videoTitle, setVideoTitle] = useState(""); // Store video title
+    const playerRef = useRef(null);
+    const ytPlayer = useRef(null);
+    const [currentVideo, setCurrentVideo] = useState("4xDzrJKXOOY");
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [videoTitle, setVideoTitle] = useState("");
 
-    const videoIds = [
+    const [videoIds, setVideoIds] = useState([
         "4xDzrJKXOOY",
         "jfKfPfyJRdk",
         "tGfQYbArQhc",
@@ -19,10 +19,22 @@ export default function Player() {
         "5yx6BWlEVcY",
         "tNkZsRW7h2c",
         "mKCieTImjvU",
+    ]);
+
+    const alternateVideoIds = [
+        "dQw4w9WgXcQ",  // Secret playlist
+        "y6120QOlsfU",
+        "L_jWHffIx5E",
+        "feA64wXhbjo",
+        "djV11Xbc914",
+        "9bZkp7q19f0",
+        "PWgvGjAhvIw",
+        "fJ9rUzIMcZQ",
+        "btPJPFnesV4",
+        "kXYiU_JCYtU",
     ];
 
     useEffect(() => {
-        // Check if YT API is already loaded
         if (!window.YT) {
             const tag = document.createElement("script");
             tag.src = "https://www.youtube.com/iframe_api";
@@ -31,12 +43,10 @@ export default function Player() {
             console.log("api loaded");
         }
 
-        // Wait for YT API to be ready
         window.onYouTubeIframeAPIReady = () => {
             createPlayer(currentVideo);
         };
 
-        // If API is already available, initialize player immediately
         if (window.YT && window.YT.Player) {
             createPlayer(currentVideo);
             console.log("api already loaded");
@@ -44,12 +54,11 @@ export default function Player() {
 
         return () => {
             if (ytPlayer.current) {
-                ytPlayer.current.destroy(); // Cleanup the player on unmount
+                ytPlayer.current.destroy();
             }
         };
     }, []);
 
-    // Function to create and initialize the YouTube player
     const createPlayer = (videoId) => {
         ytPlayer.current = new YT.Player(playerRef.current, {
             videoId: videoId,
@@ -58,10 +67,10 @@ export default function Player() {
                 onReady: (event) => {
                     event.target.playVideo();
                     setIsPlaying(true);
-                    updateVideoTitle(); // Get title when video is ready
+                    updateVideoTitle();
                 },
                 onStateChange: (event) => {
-                    setIsPlaying(event.data === 1); // 1 -> playing, 2 -> paused
+                    setIsPlaying(event.data === 1);
                 },
             },
         });
@@ -70,14 +79,12 @@ export default function Player() {
     useEffect(() => {
         if (ytPlayer.current) {
             ytPlayer.current.loadVideoById(currentVideo);
-            updateVideoTitle(); // Update title when video changes
+            updateVideoTitle();
         }
     }, [currentVideo]);
 
-    // Function to update the video title
     const updateVideoTitle = () => {
         if (ytPlayer.current) {
-            // Use setTimeout to allow time for video data to load
             setTimeout(() => {
                 const videoData = ytPlayer.current.getVideoData();
                 if (videoData && videoData.title) {
@@ -85,7 +92,7 @@ export default function Player() {
                 } else {
                     setVideoTitle("Unknown Title");
                 }
-            }, 500); // Delay by 500ms to ensure data is loaded
+            }, 500);
         }
     };
 
@@ -102,29 +109,51 @@ export default function Player() {
     const handleVideoChange = () => {
         setCurrentVideo(videoIds[Math.floor(Math.random() * videoIds.length)]);
     };
-    
+
+    const handleSecretPlaylist = () => {
+        setVideoIds(prevIds => 
+            prevIds[0] === alternateVideoIds[0] ? 
+            [
+                "4xDzrJKXOOY",
+                "jfKfPfyJRdk",
+                "tGfQYbArQhc",
+                "EQnOzVA9ndA",
+                "bRnTGwCbr3E",
+                "S_MOd40zlYU",
+                "Na0w3Mz46GA",
+                "5yx6BWlEVcY",
+                "tNkZsRW7h2c",
+                "mKCieTImjvU",
+            ] : 
+            alternateVideoIds
+        );
+    };
 
     return (
-        <div className="pl-20 pt-[85vh] bottom-10 text-white left-10 flex flex-col">
-        <div className="hidden" id="player-container">
-            <div ref={playerRef}></div>
+        <div className="pl-4 pt-[85vh] bottom-4 text-white left-4 flex flex-col md:pl-20 md:pt-[85vh] md:bottom-10 md:left-10">
+            <div className="hidden" id="player-container">
+                <div ref={playerRef}></div>
+            </div>
+        
+            <div className="w-fit bg-inherit font-semibold px-[1.5] py-1 rounded-sm mb-2 text-md">
+                {videoTitle || "Loading..."}
+            </div>
+        
+            <div className="flex flex-row space-x-2">
+                <button onClick={togglePlayPause} className="text-sm font-pone bg-white text-black p-2 cursor-pointer">
+                    {isPlaying ? "Pause" : "Play"}
+                </button>
+        
+                <button onClick={handleVideoChange} className="text-sm font-pone bg-slate-900 text-white p-2 cursor-pointer">
+                    Change Radio
+                </button>
+                <BgChangeButton />
+                <div 
+                    onClick={handleSecretPlaylist}
+                    className="w-20 h-2 bg-transparent cursor-pointer hover:bg-white/10 rounded-full"
+                    title="Secret Playlist Toggle"
+                />
+            </div>
         </div>
-    
-        <div className="w-fit bg-slate-500 font-bold px-2 py-1 rounded-sm mb-2 text-md">
-            {videoTitle || "Loading..."}
-        </div>
-    
-        <div className="flex flex-row space-x-2">
-            <button  onClick={togglePlayPause} className="text-sm border bg-white text-black rounded-sm border-slate-100 p-2 cursor-pointer">
-                {isPlaying ? "PAUSE" : "PLAY"}
-            </button>
-    
-            <button onClick={handleVideoChange} className="text-sm border bg-slate-900 text-white rounded-sm border-slate-100 p-2 cursor-pointer">
-                CHANGE RADIO
-            </button>
-            <BgChangeButton />
-        </div>
-    </div>
-    
     );
 }
