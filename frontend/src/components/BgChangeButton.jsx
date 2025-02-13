@@ -6,7 +6,7 @@ export function BgChangeButton() {
     return (
         <button
             onClick={handleBgChange}
-            className="text-sm border border-blue-500 p-2 cursor-pointer ml-2"
+            className="text-sm border border-slate-100 rounded-sm bg-slate-900 p-2 cursor-pointer ml-2"
         >
             Change Background
         </button>

@@ -77,13 +77,16 @@ export default function Player() {
     // Function to update the video title
     const updateVideoTitle = () => {
         if (ytPlayer.current) {
-            const title = ytPlayer.current.getVideoData().title;
-            setVideoTitle(title);
+            // Use setTimeout to allow time for video data to load
+            setTimeout(() => {
+                const videoData = ytPlayer.current.getVideoData();
+                if (videoData && videoData.title) {
+                    setVideoTitle(videoData.title);
+                } else {
+                    setVideoTitle("Unknown Title");
+                }
+            }, 500); // Delay by 500ms to ensure data is loaded
         }
-    };
-
-    const handleVideoChange = () => {
-        setCurrentVideo(videoIds[Math.floor(Math.random() * videoIds.length)]);
     };
 
     const togglePlayPause = () => {
@@ -96,23 +99,31 @@ export default function Player() {
         }
     };
 
+    const handleVideoChange = () => {
+        setCurrentVideo(videoIds[Math.floor(Math.random() * videoIds.length)]);
+    };
+    
+
     return (
         <div className="pl-20 pt-[85vh] bottom-10 text-white left-10">
             <div className="hidden" id="player-container">
                 <div ref={playerRef}></div>
             </div>
 
-            <div className="text-lg font-bold mb-2">
+            <div className="text-md ml-3 font-bold mb-2">
                 {videoTitle || "Loading..."}
             </div>
 
-            <button className="text-sm border border-amber-500 p-2 cursor-pointer" onClick={handleVideoChange}>
+
+
+            <button className="text-sm border bg-white text-black mr-2 rounded-sm border-slate-100 p-2 cursor-pointer ml-2" onClick={togglePlayPause}>
+                {isPlaying ? "PAUSE" : "PLAY"}
+            </button>
+
+            <button className="text-sm border bg-slate-900 rounded-sm border-slate-100 p-2 cursor-pointer" onClick={handleVideoChange}>
                 CHANGE RADIO
             </button>
 
-            <button className="text-sm border border-blue-500 p-2 cursor-pointer ml-2" onClick={togglePlayPause}>
-                {isPlaying ? "PAUSE" : "PLAY"}
-            </button>
             
             <BgChangeButton />
         
