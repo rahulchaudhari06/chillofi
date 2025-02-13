@@ -6,6 +6,7 @@ export default function Player() {
     const ytPlayer = useRef(null); // Reference to YouTube Player instance
     const [currentVideo, setCurrentVideo] = useState("4xDzrJKXOOY"); // Default video
     const [isPlaying, setIsPlaying] = useState(false); // Track play/pause state
+    const [videoTitle, setVideoTitle] = useState(""); // Store video title
 
     const videoIds = [
         "4xDzrJKXOOY",
@@ -28,7 +29,6 @@ export default function Player() {
             tag.async = true;
             document.body.appendChild(tag);
             console.log("api loaded");
-            
         }
 
         // Wait for YT API to be ready
@@ -58,6 +58,7 @@ export default function Player() {
                 onReady: (event) => {
                     event.target.playVideo();
                     setIsPlaying(true);
+                    updateVideoTitle(); // Get title when video is ready
                 },
                 onStateChange: (event) => {
                     setIsPlaying(event.data === 1); // 1 -> playing, 2 -> paused
@@ -69,8 +70,17 @@ export default function Player() {
     useEffect(() => {
         if (ytPlayer.current) {
             ytPlayer.current.loadVideoById(currentVideo);
+            updateVideoTitle(); // Update title when video changes
         }
     }, [currentVideo]);
+
+    // Function to update the video title
+    const updateVideoTitle = () => {
+        if (ytPlayer.current) {
+            const title = ytPlayer.current.getVideoData().title;
+            setVideoTitle(title);
+        }
+    };
 
     const handleVideoChange = () => {
         setCurrentVideo(videoIds[Math.floor(Math.random() * videoIds.length)]);
@@ -87,9 +97,13 @@ export default function Player() {
     };
 
     return (
-        <div className=" pl-20 pt-[85vh] bottom-10 text-white left-10">
+        <div className="pl-20 pt-[85vh] bottom-10 text-white left-10">
             <div className="hidden" id="player-container">
                 <div ref={playerRef}></div>
+            </div>
+
+            <div className="text-lg font-bold mb-2">
+                {videoTitle || "Loading..."}
             </div>
 
             <button className="text-sm border border-amber-500 p-2 cursor-pointer" onClick={handleVideoChange}>

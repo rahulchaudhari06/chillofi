@@ -5,8 +5,6 @@ import Navbar from './components/Navbar';
 import { BgProvider } from "./components/BgContext";
 
 
-
-
 function App() {
 
   return (
