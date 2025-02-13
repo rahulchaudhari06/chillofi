@@ -1,17 +1,23 @@
 import './App.css'
-import Home from './components/Home';
-import mountain from './assets/mountain.jpg';
+import Background from './components/Background';
+import Player from './components/Player';
+import Navbar from './components/Navbar';
+import { BgProvider } from "./components/BgContext";
+
+
 
 
 function App() {
 
   return (
     <>
-
-    <div className='h-screen w-screen bg-cover bg-center flex justify-center items-center text-6xl text-slate-100 'style={{ backgroundImage: `url(${mountain})` }}>
-      <Home/>
-    </div>
-
+     <div className="relative ">
+     <BgProvider>
+            <Background />
+            <Navbar />
+            <Player/>
+        </BgProvider>
+        </div>
     </>
   )
 }
